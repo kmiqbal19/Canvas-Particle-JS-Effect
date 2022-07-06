@@ -594,10 +594,10 @@ function Particle(x, y, radius, dx, dy, color) {
         let distanceY = mouse.y - this.y;
         let distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
         if (distance < mouse.radius + this.radius) {
-            if (mouse.x < this.x && this.x < canvas.width - this.radius * 10) this.x += 10;
-            if (mouse.x > this.x && this.x > this.radius * 10) this.x -= 10;
-            if (mouse.y < this.y && this.y < canvas.height - this.radius * 10) this.y += 10;
-            if (mouse.y > this.y && this.y > this.radius * 10) this.y -= 10;
+            if (mouse.x < this.x && this.x < canvas.width - this.radius * 10) this.x += 5;
+            if (mouse.x > this.x && this.x > this.radius * 10) this.x -= 5;
+            if (mouse.y < this.y && this.y < canvas.height - this.radius * 10) this.y += 5;
+            if (mouse.y > this.y && this.y > this.radius * 10) this.y -= 5;
         }
         // General Velocity Increase
         this.x += this.dx;
@@ -633,16 +633,18 @@ function animate() {
 animate();
 // Check if particles are close enough to draw line between them
 function connect() {
+    let opacity = 1;
     for(let a = 0; a < particles.length; a++)for(let b = a; b < particles.length; b++){
         let x = particles[a].x - particles[b].x;
         let y = particles[a].y - particles[b].y;
         let distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
         if (distance < 100) {
+            opacity = 1 - distance / 20000;
             c.beginPath();
             c.lineWidth = 1;
             c.moveTo(particles[a].x, particles[a].y);
             c.lineTo(particles[b].x, particles[b].y);
-            c.strokeStyle = "white";
+            c.strokeStyle = "rgba(255,255,255,  " + opacity + ")";
             c.stroke();
         }
     }
