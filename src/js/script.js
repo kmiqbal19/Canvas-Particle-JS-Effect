@@ -4,8 +4,12 @@ canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 const c = canvas.getContext("2d");
 // Utils
+const colors = ["red", "blue", "cyan", "orange", "limegreen"];
 const genRandomInt = (min, max) => {
   return Math.floor(Math.random() * (max - min + 1) + min);
+};
+const getRandomColor = (colors) => {
+  return colors[Math.floor(Math.random() * colors.length)];
 };
 // Mouse Position
 const mouse = {
@@ -22,6 +26,10 @@ window.addEventListener("resize", function (e) {
 window.addEventListener("mousemove", (e) => {
   mouse.x = e.clientX;
   mouse.y = e.clientY;
+});
+window.addEventListener("mouseout", (e) => {
+  mouse.x = undefined;
+  mouse.y = undefined;
 });
 // Particle Object Constructor
 function Particle(x, y, radius, dx, dy, color) {
@@ -49,9 +57,20 @@ function Particle(x, y, radius, dx, dy, color) {
     let distanceX = mouse.x - this.x;
     let distanceY = mouse.y - this.y;
     let distance = Math.sqrt(Math.pow(distanceX, 2) + Math.pow(distanceY, 2));
-    // if (distance < mouse.radius + this.radius) {
-    //   console.log("collided");
-    // }
+    if (distance < mouse.radius + this.radius) {
+      if (mouse.x < this.x && this.x < canvas.width - this.radius * 10) {
+        this.x += 10;
+      }
+      if (mouse.x > this.x && this.x > this.radius * 10) {
+        this.x -= 10;
+      }
+      if (mouse.y < this.y && this.y < canvas.height - this.radius * 10) {
+        this.y += 10;
+      }
+      if (mouse.y > this.y && this.y > this.radius * 10) {
+        this.y -= 10;
+      }
+    }
     // General Velocity Increase
     this.x += this.dx;
     this.y += this.dy;
@@ -63,14 +82,14 @@ function Particle(x, y, radius, dx, dy, color) {
 let particles = [];
 function init() {
   particles = [];
-  let numberOfParticles = Math.floor((canvas.width * canvas.height) / 9000);
+  let numberOfParticles = Math.floor((canvas.width * canvas.height) / 8000);
   for (let i = 0; i < numberOfParticles; i++) {
-    let radius = Math.random() * 5 + 1;
+    let radius = Math.random() * 7 + 1;
     let x = Math.random() * innerWidth - 2 * radius;
     let y = Math.random() * innerHeight - 2 * radius;
     let dx = Math.random() * 3 - 1.5;
     let dy = Math.random() * 3 - 1.5;
-    let color = "blue";
+    let color = getRandomColor(colors);
     particles.push(new Particle(x, y, radius, dx, dy, color));
   }
 }
@@ -82,5 +101,25 @@ function animate() {
   particles.forEach((particle) => {
     particle.update();
   });
+  connect();
 }
 animate();
+// Check if particles are close enough to draw line between them
+function connect() {
+  for (let a = 0; a < particles.length; a++) {
+    for (let b = a; b < particles.length; b++) {
+      let x = particles[a].x - particles[b].x;
+      let y = particles[a].y - particles[b].y;
+
+      let distance = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+      if (distance < 100) {
+        c.beginPath();
+        c.lineWidth = 1;
+        c.moveTo(particles[a].x, particles[a].y);
+        c.lineTo(particles[b].x, particles[b].y);
+        c.strokeStyle = "white";
+        c.stroke();
+      }
+    }
+  }
+}

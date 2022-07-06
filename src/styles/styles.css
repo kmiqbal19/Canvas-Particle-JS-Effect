@@ -2,9 +2,14 @@
   margin: 0;
   padding: 0;
   box-sizing: border-box;
+  color: lem;
 }
 #canvas-1 {
-  background: radial-gradient(#f0ebe3, #dc9859);
+  /* background: radial-gradient(gray, black); */
+  /* background-color: black; */
+
+  background: linear-gradient(rgba(0, 0, 0, 0.65), rgba(10, 10, 10, 0.456)),
+    url("../assets/parco-chan-Ztp54-7b5Qc-unsplash.jpg");
   position: absolute;
   top: 0;
   left: 0;

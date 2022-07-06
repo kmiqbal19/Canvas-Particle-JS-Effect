@@ -1,5 +1,6 @@
 * {
   box-sizing: border-box;
+  color: lem;
   margin: 0;
   padding: 0;
 }
@@ -7,7 +8,7 @@
 #canvas-1 {
   width: 100%;
   height: 100%;
-  background: radial-gradient(#f0ebe3, #dc9859);
+  background: linear-gradient(#000000a6, #0a0a0a74), url("parco-chan-Ztp54-7b5Qc-unsplash.f137be55.jpg");
   position: absolute;
   top: 0;
   left: 0;
